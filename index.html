@@ -77,6 +77,26 @@
             <button type="submit" class="btn btn-primary btn-block">Salvar</button>
             <button type="button" class="btn btn-attractive btn-block mt-3" onclick="openObservacoesPage()">Ver Observações</button>
         </form>
+        <div class="container">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Filtro de Ocorrências por Turno</h5>
+                    <div class="form-group">
+                        <label for="turnoFilter">Selecione o Turno:</label>
+                        <select class="form-control" id="turnoFilter" onchange="filterByTurno(this.value)">
+                            <option value="">Todos</option>
+                            <option value="TA">TA</option>
+                            <option value="TB">TB</option>
+                            <option value="TC">TC</option>
+                        </select>
+                    </div>
+                    <div id="ocorrenciasCount"></div>
+                </div>
+            </div>
+            
+             
+        
+        </div>
     </div>
 
     <!-- Bootstrap JS -->
@@ -129,6 +149,43 @@
         function openObservacoesPage() {
             window.location.href = "observacoes.html";
         }
+
+        function filterByTurno(turno) {
+    const maquinas = ['maq01', 'maq02', 'maq03'];
+    const countContainer = document.getElementById('ocorrenciasCount');
+    countContainer.innerHTML = '';
+        
+
+    maquinas.forEach(maquinaId => {
+        fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
+            .then(response => response.json())
+            .then(data => {
+                const filteredData = turno ? data.filter(item => item.turno === turno) : data;
+                const turnoCount = filteredData.length;
+
+                const maquinaCard = document.createElement('div');
+                maquinaCard.classList.add('card', 'mt-3');
+                const maquinaCardBody = document.createElement('div');
+                maquinaCardBody.classList.add('card-body');
+
+                const maquinaTitle = document.createElement('h5');
+                maquinaTitle.classList.add('card-title');
+                maquinaTitle.textContent = `Máquina ${maquinaId.slice(3)}`;
+                const maquinaCount = document.createElement('p');
+                maquinaCount.classList.add('card-text');
+                maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
+
+                maquinaCardBody.appendChild(maquinaTitle);
+                maquinaCardBody.appendChild(maquinaCount);
+                maquinaCard.appendChild(maquinaCardBody);
+                countContainer.appendChild(maquinaCard);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+}
+
     </script>
 </body>
 </html>
