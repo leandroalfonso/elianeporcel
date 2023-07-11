@@ -105,6 +105,9 @@
         </div>
     </div>
 <div class="container">
+    <div id="card" class="card">
+
+    </div>
      
 
 </div>
@@ -147,6 +150,38 @@
         fetchObservacoes('maq01', 'maq01-observacoes');
         fetchObservacoes('maq02', 'maq02-observacoes');
         fetchObservacoes('maq03', 'maq03-observacoes');
+
+        function cards(){
+            fetch(`https://obs-eliane.vercel.app/maquinas/maq01`)
+                .then(response => response.json())
+                .then(data => {
+                    const card = document.getElementById('card');
+                    card.innerHTML = '';
+
+                    data.forEach(item => {
+                        const row = document.createElement('div');
+                        const dataHoraCell = document.createElement('td');
+                        const turnoCell = document.createElement('td');
+                        const obsCell = document.createElement('td');
+
+                        // Formatar a data e hora para o formato brasileiro
+                        const dataHora = new Date(item.dataHora).toLocaleString('pt-BR');
+
+                        dataHoraCell.textContent = dataHora;
+                        turnoCell.textContent = item.turno;
+                        obsCell.textContent = item.obs;
+
+                        row.appendChild(dataHoraCell);
+                        row.appendChild(turnoCell);
+                        row.appendChild(obsCell);
+                        card.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+                cards();
+        }
     </script>
 </body>
 </html>
