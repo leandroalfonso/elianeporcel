@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Máquinas</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+        .btn-attractive {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .btn-attractive:hover {
+            background-color: #138496;
+            border-color: #138496;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Formulário de Máquinas</h2>
+        <form id="maquinasForm">
+            <div class="form-group">
+                <label for="turnoInput">Turno:</label>
+                <select class="form-control" id="turnoInput" name="turno">
+                    <option value="TA">TA</option>
+                    <option value="TB">TB</option>
+                    <option value="TC">TC</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="maquinasInput">Máquinas:</label>
+                <select class="form-control" id="maquinasInput" name="maquinas">
+                    <option value="MAQ01">MAQ01</option>
+                    <option value="MAQ02">MAQ02</option>
+                    <option value="MAQ03">MAQ03</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dataHoraInput">Data e Hora:</label>
+                <input type="datetime-local" class="form-control" id="dataHoraInput" name="dataHora">
+            </div>
+            <div class="form-group">
+                <label for="observacoesInput">Observações:</label>
+                <textarea class="form-control" id="observacoesInput" name="observacoes" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Salvar</button>
+            <button type="button" class="btn btn-attractive btn-block mt-3" onclick="openObservacoesPage()">Ver Observações</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Função para lidar com o envio do formulário
+        document.getElementById('maquinasForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita o comportamento padrão de envio do formulário
+
+            const turno = document.getElementById('turnoInput').value;
+            const maquinas = document.getElementById('maquinasInput').value;
+            const dataHora = document.getElementById('dataHoraInput').value;
+            const observacoes = document.getElementById('observacoesInput').value;
+
+            const formData = {
+                turno: turno,
+                maquina: maquinas,
+                dataHora: dataHora,
+                obs: observacoes
+            };
+
+            // Faz a solicitação POST para o servidor
+            fetch('https://obs-eliane.vercel.app/maquinas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Dados salvos com sucesso!");
+                } else {
+                    throw new Error("Erro ao salvar os dados.");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+
+        // Função para abrir a página de observações
+        function openObservacoesPage() {
+            window.location.href = "observacoes.html";
+        }
+    </script>
+</body>
+</html>

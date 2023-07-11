@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observações por Máquina</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .container {
+            margin-top: 20px;
+        }
+        
+        .table {
+            background-color: #fff;
+        }
+        
+        .nav-link {
+            background-color: #343a40;
+            color: #fff;
+            border-color: #343a40;
+        }
+        
+        .nav-link.active {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        h2, h3 {
+            color: #343a40;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-3">Observações por Máquina</h2>
+
+        <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="maq01-tab" data-bs-toggle="tab" data-bs-target="#maq01" type="button" role="tab" aria-controls="maq01" aria-selected="true">Máquina 01</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="maq02-tab" data-bs-toggle="tab" data-bs-target="#maq02" type="button" role="tab" aria-controls="maq02" aria-selected="false">Máquina 02</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="maq03-tab" data-bs-toggle="tab" data-bs-target="#maq03" type="button" role="tab" aria-controls="maq03" aria-selected="false">Máquina 03</button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-4" id="myTabContent">
+            <div class="tab-pane fade show active" id="maq01" role="tabpanel" aria-labelledby="maq01-tab">
+                <h3 class="mb-4">Máquina 01</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Data e Hora</th>
+                                <th>Turno</th>
+                                <th>Observações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="maq01-observacoes"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="maq02" role="tabpanel" aria-labelledby="maq02-tab">
+                <h3 class="mb-4">Máquina 02</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Data e Hora</th>
+                                <th>Turno</th>
+                                <th>Observações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="maq02-observacoes"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="maq03" role="tabpanel" aria-labelledby="maq03-tab">
+                <h3 class="mb-4">Máquina 03</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Data e Hora</th>
+                                <th>Turno</th>
+                                <th>Observações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="maq03-observacoes"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="container">
+     
+
+</div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function fetchObservacoes(maquinaId, containerId) {
+            fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = '';
+
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        const dataHoraCell = document.createElement('td');
+                        const turnoCell = document.createElement('td');
+                        const obsCell = document.createElement('td');
+
+                        // Formatar a data e hora para o formato brasileiro
+                        const dataHora = new Date(item.dataHora).toLocaleString('pt-BR');
+
+                        dataHoraCell.textContent = dataHora;
+                        turnoCell.textContent = item.turno;
+                        obsCell.textContent = item.obs;
+
+                        row.appendChild(dataHoraCell);
+                        row.appendChild(turnoCell);
+                        row.appendChild(obsCell);
+                        container.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        // Chamar a função para buscar as observações ao carregar a página
+        fetchObservacoes('maq01', 'maq01-observacoes');
+        fetchObservacoes('maq02', 'maq02-observacoes');
+        fetchObservacoes('maq03', 'maq03-observacoes');
+    </script>
+</body>
+</html>
