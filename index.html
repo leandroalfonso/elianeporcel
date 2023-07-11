@@ -218,7 +218,27 @@ function filterByData(data) {
                 console.error(error);
             });
     });
+    cretaeCardElement(maquinaId, dataCount);
 }
+function createCardElement(maquinaId, dataCount) {
+  const maquinaCard = document.createElement('div');
+  maquinaCard.classList.add('card', 'mt-3');
+  const maquinaCardBody = document.createElement('div');
+  maquinaCardBody.classList.add('card-body');
+  const maquinaTitle = document.createElement('h5');
+  maquinaTitle.classList.add('card-title');
+  maquinaTitle.textContent = `Máquina ${maquinaId.slice(3)}`;
+  const ocorrenciasCount = document.createElement('p');
+  ocorrenciasCount.classList.add('card-text');
+  ocorrenciasCount.textContent = `Quantidade de Ocorrências: ${dataCount}`;
+
+  maquinaCardBody.appendChild(maquinaTitle);
+  maquinaCardBody.appendChild(ocorrenciasCount);
+  maquinaCard.appendChild(maquinaCardBody);
+
+  return maquinaCard;
+}
+
 
     </script>
 </body>
