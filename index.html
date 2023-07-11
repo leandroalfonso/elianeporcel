@@ -97,6 +97,14 @@
              
         
         </div>
+        <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title" id="maquinaTitle">Máquina 01</h5>
+              <p class="card-text" id="ocorrenciasCount">Quantidade de Ocorrências: 0</p>
+            </div>
+          </div>
+          
+          
     </div>
 
     <!-- Bootstrap JS -->
@@ -178,6 +186,32 @@
                 maquinaCardBody.appendChild(maquinaTitle);
                 maquinaCardBody.appendChild(maquinaCount);
                 maquinaCard.appendChild(maquinaCardBody);
+                countContainer.appendChild(maquinaCard);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+}
+function filterByData(data) {
+    const maquinas = ['maq01', 'maq02', 'maq03'];
+    const countContainer = document.getElementById('ocorrenciasCount');
+    countContainer.innerHTML = '';
+
+    maquinas.forEach(maquinaId => {
+        fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
+            .then(response => response.json())
+            .then(data => {
+                const filteredData = data.filter(item => {
+                    const itemData = new Date(item.dataHora);
+                    const inputData = new Date(data);
+
+                    // Filtrar ocorrências com a mesma data
+                    return itemData.toDateString() === inputData.toDateString();
+                });
+
+                const dataCount = filteredData.length;
+                const maquinaCard = createCardElement(maquinaId, dataCount);
                 countContainer.appendChild(maquinaCard);
             })
             .catch(error => {
