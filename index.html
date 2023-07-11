@@ -112,6 +112,7 @@
             .then(response => {
                 if (response.ok) {
                     alert("Dados salvos com sucesso!");
+                    document.getElementById('maquinasForm').reset(); // Limpar os campos do formulário
                     window.location.href = "observacoes.html";
                    
                 } else {
