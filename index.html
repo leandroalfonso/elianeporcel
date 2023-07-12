@@ -156,21 +156,20 @@
             window.location.href = "observacoes.html";
         }
 
-        // Função para filtrar as ocorrências por turno
         function filterByTurno(turno, data) {
   const maquinas = ['maq01', 'maq02', 'maq03'];
   const countContainer = document.getElementById('ocorrenciasCount');
   countContainer.innerHTML = '';
 
   maquinas.forEach(maquinaId => {
-    let url = `https://obs-eliane.vercel.app/maquinas/${maquinaId}`;
+    let url = `https://obs-eliane.vercel.app/maquinas?turno=${turno}&data=${data}`;
 
-    if (turno) {
-      url += `?turno=${turno}`;
-    }
-
-    if (data) {
-      url += `&data=${data}`;
+    if (!turno && !data) {
+      url = `https://obs-eliane.vercel.app/maquinas`;
+    } else if (!turno) {
+      url = `https://obs-eliane.vercel.app/maquinas?data=${data}`;
+    } else if (!data) {
+      url = `https://obs-eliane.vercel.app/maquinas?turno=${turno}`;
     }
 
     fetch(url)
@@ -200,6 +199,8 @@
       });
   });
 }
+
+
 
         
     </script>
