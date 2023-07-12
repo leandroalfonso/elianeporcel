@@ -233,15 +233,17 @@
                                     const overlay = document.createElement('div');
                                     overlay.classList.add('modal-overlay');
                                     overlay.innerHTML = `
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="detalhesModalLabel">Detalhes da Ocorrência</h5>
-                                                <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <strong>Data e Hora:</strong> ${dataHora}<br>
-                                                <strong>Turno:</strong> ${turno}<br>
-                                                <strong>Observações:</strong> ${obs}
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="detalhesModalLabel">Detalhes da Ocorrência</h5>
+                                                    <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <strong>Data e Hora:</strong> ${dataHora}<br>
+                                                    <strong>Turno:</strong> ${turno}<br>
+                                                    <strong>Observações:</strong> ${obs}
+                                                </div>
                                             </div>
                                         </div>
                                     `;
