@@ -111,6 +111,7 @@
                                 <th>Data e Hora</th>
                                 <th>Turno</th>
                                 <th>Observações</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="maq03-observacoes"></tbody>
@@ -187,7 +188,7 @@
                         const observacoesTable = document.getElementById(`maq${index + 1}-observacoes`);
                         observacoesTable.addEventListener('click', function (event) {
                             const target = event.target;
-                            if (target.tagName === 'BUTTON') {
+                            if (target.classList.contains('detalhes-button')) {
                                 const dataHora = target.getAttribute('data-hora');
                                 // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
                                 window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
@@ -222,7 +223,7 @@
                         turnoCell.textContent = item.turno;
                         obsCell.textContent = item.obs;
                         detalhesButton.textContent = 'Detalhes';
-                        detalhesButton.classList.add('btn', 'btn-primary');
+                        detalhesButton.classList.add('btn', 'btn-primary', 'detalhes-button');
                         detalhesButton.setAttribute('data-hora', item.dataHora);
 
                         buttonCell.appendChild(detalhesButton);
