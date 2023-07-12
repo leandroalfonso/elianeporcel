@@ -130,127 +130,125 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 
     <script>
-        function filterByTurno(turno) {
-            const maquinas = ['MAQ01', 'MAQ02', 'MAQ03'];
-            const countContainer = document.getElementById('ocorrenciasCount');
-            countContainer.innerHTML = '';
+        document.addEventListener('DOMContentLoaded', function() {
+            function filterByTurno(turno) {
+                const maquinas = ['MAQ01', 'MAQ02', 'MAQ03'];
+                const countContainer = document.getElementById('ocorrenciasCount');
+                countContainer.innerHTML = '';
 
-            maquinas.forEach((maquinaId, index) => {
+                maquinas.forEach((maquinaId, index) => {
+                    fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const filteredData = turno ? data.filter(item => item.turno === turno) : data;
+                            const turnoCount = filteredData.length;
+
+                            const maquinaCard = document.createElement('div');
+                            maquinaCard.classList.add('card', 'mt-3');
+                            const maquinaCardBody = document.createElement('div');
+                            maquinaCardBody.classList.add('card-body');
+
+                            const maquinaTitle = document.createElement('h5');
+                            maquinaTitle.classList.add('card-title');
+                            maquinaTitle.textContent = `Máquina ${index + 1}`;
+                            const maquinaCount = document.createElement('p');
+                            maquinaCount.classList.add('card-text');
+                            maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
+
+                            maquinaCardBody.appendChild(maquinaTitle);
+                            maquinaCardBody.appendChild(maquinaCount);
+                            maquinaCard.appendChild(maquinaCardBody);
+                            countContainer.appendChild(maquinaCard);
+
+                            // Gráfico
+                            const chartContainer = document.getElementById(`maq${index + 1}-chart`);
+                            const chartData = [turnoCount, data.length - turnoCount];
+                            const chartColors = ['rgba(23, 162, 184, 0.5)', 'rgba(0, 0, 0, 0.2)'];
+
+                            new Chart(chartContainer, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Ocorrências', ''],
+                                    datasets: [{
+                                        data: chartData,
+                                        backgroundColor: chartColors
+                                    }]
+                                },
+                                options: {
+                                    plugins: {
+                                        tooltip: {
+                                            enabled: false
+                                        },
+                                        legend: {
+                                            display: false
+                                        }
+                                    },
+                                    cutout: '80%'
+                                }
+                            });
+
+                            // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
+                            const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
+                            const detalhesButtons = observacoesTable.getElementsByTagName('button');
+
+                            Array.from(detalhesButtons).forEach(button => {
+                                button.addEventListener('click', function(event) {
+                                    const dataHora = button.getAttribute('data-hora');
+                                    // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
+                                    window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                });
+            }
+
+            function fetchObservacoes(maquinaId, containerId) {
                 fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
                     .then(response => response.json())
                     .then(data => {
-                        const filteredData = turno ? data.filter(item => item.turno === turno) : data;
-                        const turnoCount = filteredData.length;
+                        const container = document.getElementById(containerId);
+                        container.innerHTML = '';
 
-                        const maquinaCard = document.createElement('div');
-                        maquinaCard.classList.add('card', 'mt-3');
-                        const maquinaCardBody = document.createElement('div');
-                        maquinaCardBody.classList.add('card-body');
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            const dataHoraCell = document.createElement('td');
+                            const turnoCell = document.createElement('td');
+                            const obsCell = document.createElement('td');
+                            const buttonCell = document.createElement('td');
+                            const detalhesButton = document.createElement('button');
 
-                        const maquinaTitle = document.createElement('h5');
-                        maquinaTitle.classList.add('card-title');
-                        maquinaTitle.textContent = `Máquina ${index + 1}`;
-                        const maquinaCount = document.createElement('p');
-                        maquinaCount.classList.add('card-text');
-                        maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
+                            // Formatar a data e hora para o formato brasileiro
+                            const dataHora = new Date(item.dataHora).toLocaleString('pt-BR');
 
-                        maquinaCardBody.appendChild(maquinaTitle);
-                        maquinaCardBody.appendChild(maquinaCount);
-                        maquinaCard.appendChild(maquinaCardBody);
-                        countContainer.appendChild(maquinaCard);
+                            dataHoraCell.textContent = dataHora;
+                            turnoCell.textContent = item.turno;
+                            obsCell.textContent = item.obs;
+                            detalhesButton.textContent = 'Detalhes';
+                            detalhesButton.classList.add('btn', 'btn-primary', 'detalhes-button');
+                            detalhesButton.setAttribute('data-hora', item.dataHora);
 
-                        // Gráfico
-                        const chartContainer = document.getElementById(`maq${index + 1}-chart`);
-                        const chartData = [turnoCount, data.length - turnoCount];
-                        const chartColors = ['rgba(23, 162, 184, 0.5)', 'rgba(0, 0, 0, 0.2)'];
+                            buttonCell.appendChild(detalhesButton);
 
-                        new Chart(chartContainer, {
-                            type: 'doughnut',
-                            data: {
-                                labels: ['Ocorrências', ''],
-                                datasets: [{
-                                    data: chartData,
-                                    backgroundColor: chartColors
-                                }]
-                            },
-                            options: {
-                                plugins: {
-                                    tooltip: {
-                                        enabled: false
-                                    },
-                                    legend: {
-                                        display: false
-                                    }
-                                },
-                                cutout: '80%'
-                            }
+                            row.appendChild(dataHoraCell);
+                            row.appendChild(turnoCell);
+                            row.appendChild(obsCell);
+                            row.appendChild(buttonCell);
+                            container.appendChild(row);
                         });
-
-                      // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
-                              // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
-                                        const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
-                                        const detalhesButtons = observacoesTable.getElementsByTagName('button');
-
-                                        Array.from(detalhesButtons).forEach(button => {
-                                            button.addEventListener('click', function(event) {
-                                                const dataHora = button.getAttribute('data-hora');
-                                                // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
-                                                window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
-                                            });
-                                        });
-
-
-
                     })
                     .catch(error => {
                         console.error(error);
                     });
-            });
-        }
+            }
 
-        function fetchObservacoes(maquinaId, containerId) {
-            fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById(containerId);
-                    container.innerHTML = '';
-
-                    data.forEach(item => {
-                        const row = document.createElement('tr');
-                        const dataHoraCell = document.createElement('td');
-                        const turnoCell = document.createElement('td');
-                        const obsCell = document.createElement('td');
-                        const buttonCell = document.createElement('td');
-                        const detalhesButton = document.createElement('button');
-
-                        // Formatar a data e hora para o formato brasileiro
-                        const dataHora = new Date(item.dataHora).toLocaleString('pt-BR');
-
-                        dataHoraCell.textContent = dataHora;
-                        turnoCell.textContent = item.turno;
-                        obsCell.textContent = item.obs;
-                        detalhesButton.textContent = 'Detalhes';
-                        detalhesButton.classList.add('btn', 'btn-primary', 'detalhes-button');
-                        detalhesButton.setAttribute('data-hora', item.dataHora);
-
-                        buttonCell.appendChild(detalhesButton);
-
-                        row.appendChild(dataHoraCell);
-                        row.appendChild(turnoCell);
-                        row.appendChild(obsCell);
-                        row.appendChild(buttonCell);
-                        container.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-
-        // Chamar a função para buscar as observações ao carregar a página
-        fetchObservacoes('MAQ01', 'maq01-observacoes');
-        fetchObservacoes('MAQ02', 'maq02-observacoes');
-        fetchObservacoes('MAQ03', 'maq03-observacoes');
+            // Chamar a função para buscar as observações ao carregar a página
+            fetchObservacoes('MAQ01', 'maq01-observacoes');
+            fetchObservacoes('MAQ02', 'maq02-observacoes');
+            fetchObservacoes('MAQ03', 'maq03-observacoes');
+        });
     </script>
 </body>
 </html>
