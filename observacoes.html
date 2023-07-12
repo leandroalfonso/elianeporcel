@@ -135,9 +135,6 @@
             <div id="ocorrenciasCount"></div>
         </div>
     </div>
-    
-     
-
 </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -147,7 +144,7 @@
 
     <script>
         function filterByTurno(turno) {
-            const maquinas = ['maq01', 'maq02', 'maq03'];
+            const maquinas = ['MAQ01', 'MAQ02', 'MAQ03'];
             const countContainer = document.getElementById('ocorrenciasCount');
             countContainer.innerHTML = '';
 
@@ -177,20 +174,17 @@
 
                         // Gráfico
                         const chartContainer = document.getElementById(`maq${index + 1}-chart`);
-                        const chartLabels = ['Ocorrências', ''];
-                        const chartData = [turnoCount, 0];
+                        const chartData = [turnoCount, data.length - turnoCount];
                         const chartColors = ['rgba(23, 162, 184, 0.5)', 'rgba(0, 0, 0, 0.2)'];
 
-                        const chart = new Chart(chartContainer, {
+                        new Chart(chartContainer, {
                             type: 'doughnut',
                             data: {
-                                labels: chartLabels,
-                                datasets: [
-                                    {
-                                        data: chartData,
-                                        backgroundColor: chartColors
-                                    }
-                                ]
+                                labels: ['Ocorrências', ''],
+                                datasets: [{
+                                    data: chartData,
+                                    backgroundColor: chartColors
+                                }]
                             },
                             options: {
                                 plugins: {
@@ -243,9 +237,9 @@
         }
 
         // Chamar a função para buscar as observações ao carregar a página
-        fetchObservacoes('maq01', 'maq01-observacoes');
-        fetchObservacoes('maq02', 'maq02-observacoes');
-        fetchObservacoes('maq03', 'maq03-observacoes');
+        fetchObservacoes('MAQ01', 'maq01-observacoes');
+        fetchObservacoes('MAQ02', 'maq02-observacoes');
+        fetchObservacoes('MAQ03', 'maq03-observacoes');
     </script>
 </body>
 </html>
