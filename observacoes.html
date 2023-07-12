@@ -42,36 +42,6 @@
             height: 300px;
             width: 100%;
         }
-
-        /* Estilo para o modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            color: #333;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -105,7 +75,6 @@
                                 <th>Data e Hora</th>
                                 <th>Turno</th>
                                 <th>Observações</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="maq01-observacoes"></tbody>
@@ -125,7 +94,6 @@
                                 <th>Data e Hora</th>
                                 <th>Turno</th>
                                 <th>Observações</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="maq02-observacoes"></tbody>
@@ -145,7 +113,6 @@
                                 <th>Data e Hora</th>
                                 <th>Turno</th>
                                 <th>Observações</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="maq03-observacoes"></tbody>
@@ -216,41 +183,6 @@
                                     cutout: '80%'
                                 }
                             });
-
-                            // Adiciona o evento de clique para mostrar os detalhes da ocorrência
-                            const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
-                            const detalhesButtons = observacoesTable.querySelectorAll('.detalhes-button');
-                            console.log('Iniciando o loop de detalhesButtons');
-
-                            detalhesButtons.forEach(button => {
-                                button.addEventListener('click', function(event) {
-                                    console.log('Botão "Detalhes" clicado!');
-                                    const dataHora = this.getAttribute('data-hora');
-                                    const turno = this.parentNode.parentNode.querySelector('.turno-cell').textContent;
-                                    const obs = this.parentNode.parentNode.querySelector('.obs-cell').textContent;
-
-                                    // Cria um elemento de sobreposição/modal para exibir os detalhes da ocorrência
-                                    const overlay = document.createElement('div');
-                                    overlay.classList.add('modal-overlay');
-                                    overlay.innerHTML = `
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="detalhesModalLabel">Detalhes da Ocorrência</h5>
-                                                    <button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <strong>Data e Hora:</strong> ${dataHora}<br>
-                                                    <strong>Turno:</strong> ${turno}<br>
-                                                    <strong>Observações:</strong> ${obs}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `;
-
-                                    document.body.appendChild(overlay);
-                                });
-                            });
                         })
                         .catch(error => {
                             console.error(error);
@@ -269,11 +201,7 @@
                             const row = document.createElement('tr');
                             const dataHoraCell = document.createElement('td');
                             const turnoCell = document.createElement('td');
-                            turnoCell.classList.add('turno-cell');
                             const obsCell = document.createElement('td');
-                            obsCell.classList.add('obs-cell');
-                            const buttonCell = document.createElement('td');
-                            const detalhesButton = document.createElement('button');
 
                             // Formatar a data e hora para o formato brasileiro
                             const dataHora = new Date(item.dataHora).toLocaleString('pt-BR');
@@ -281,16 +209,10 @@
                             dataHoraCell.textContent = dataHora;
                             turnoCell.textContent = item.turno;
                             obsCell.textContent = item.obs;
-                            detalhesButton.textContent = 'Detalhes do btn';
-                            detalhesButton.classList.add('btn', 'btn-primary', 'detalhes-button');
-                            detalhesButton.setAttribute('data-hora', item.dataHora);
-
-                            buttonCell.appendChild(detalhesButton);
 
                             row.appendChild(dataHoraCell);
                             row.appendChild(turnoCell);
                             row.appendChild(obsCell);
-                            row.appendChild(buttonCell);
                             container.appendChild(row);
                         });
                     })
