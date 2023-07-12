@@ -62,6 +62,7 @@
             </div>
             <div class="form-group">
                 <label for="maquinasInput">Máquinas:</label>
+                
                 <select class="form-control" id="maquinasInput" name="maquinas">
                     <option value="MAQ01">MAQ01</option>
                     <option value="MAQ02">MAQ02</option>
@@ -78,14 +79,22 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block">Salvar</button>
             <button type="button" class="btn btn-attractive btn-block mt-3" onclick="openObservacoesPage()">Ver Observações</button>
+            
         </form>
         <div class="container">
             <div class="card mt-4">
                 <div class="card-body">
                     <h5 class="card-title">Filtro de Ocorrências por Turno</h5>
                     <div class="form-group">
+                        <div class="form-group">
+                            <label for="dataFilter">Filtrar por Data:</label>
+                            <input type="date" class="form-control" id="dataFilter" onchange="filterByTurno(document.getElementById('turnoFilter').value, this.value)">
+                          </div>
+                          
                         <label for="turnoFilter">Selecione o Turno:</label>
-                        <select class="form-control" id="turnoFilter" onchange="filterByTurno(this.value)">
+                    
+                            <select class="form-control" id="turnoFilter" onchange="filterByTurno(this.value, document.getElementById('dataFilter').value)">
+
                             <option value="">Todos</option>
                             <option value="TA">TA</option>
                             <option value="TB">TB</option>
@@ -148,40 +157,51 @@
         }
 
         // Função para filtrar as ocorrências por turno
-        function filterByTurno(turno) {
-            const maquinas = ['maq01', 'maq02', 'maq03'];
-            const countContainer = document.getElementById('ocorrenciasCount');
-            countContainer.innerHTML = '';
+        function filterByTurno(turno, data) {
+  const maquinas = ['maq01', 'maq02', 'maq03'];
+  const countContainer = document.getElementById('ocorrenciasCount');
+  countContainer.innerHTML = '';
 
-            maquinas.forEach(maquinaId => {
-                fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const filteredData = turno ? data.filter(item => item.turno === turno) : data;
-                        const turnoCount = filteredData.length;
+  maquinas.forEach(maquinaId => {
+    let url = `https://obs-eliane.vercel.app/maquinas/${maquinaId}`;
 
-                        const maquinaCard = document.createElement('div');
-                        maquinaCard.classList.add('card', 'mt-3');
-                        const maquinaCardBody = document.createElement('div');
-                        maquinaCardBody.classList.add('card-body');
+    if (turno) {
+      url += `?turno=${turno}`;
+    }
 
-                        const maquinaTitle = document.createElement('h5');
-                        maquinaTitle.classList.add('card-title');
-                        maquinaTitle.textContent = `Máquina ${maquinaId.slice(3)}`;
-                        const maquinaCount = document.createElement('p');
-                        maquinaCount.classList.add('card-text');
-                        maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
+    if (data) {
+      url += `&data=${data}`;
+    }
 
-                        maquinaCardBody.appendChild(maquinaTitle);
-                        maquinaCardBody.appendChild(maquinaCount);
-                        maquinaCard.appendChild(maquinaCardBody);
-                        countContainer.appendChild(maquinaCard);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            });
-        }
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const turnoCount = data.length;
+
+        const maquinaCard = document.createElement('div');
+        maquinaCard.classList.add('card', 'mt-3');
+        const maquinaCardBody = document.createElement('div');
+        maquinaCardBody.classList.add('card-body');
+
+        const maquinaTitle = document.createElement('h5');
+        maquinaTitle.classList.add('card-title');
+        maquinaTitle.textContent = `Máquina ${maquinaId.slice(3)}`;
+        const maquinaCount = document.createElement('p');
+        maquinaCount.classList.add('card-text');
+        maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
+
+        maquinaCardBody.appendChild(maquinaTitle);
+        maquinaCardBody.appendChild(maquinaCount);
+        maquinaCard.appendChild(maquinaCardBody);
+        countContainer.appendChild(maquinaCard);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  });
+}
+
+        
     </script>
 </body>
 
