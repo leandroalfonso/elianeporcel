@@ -157,7 +157,7 @@
         }
 
         function filterByTurno(turno, data) {
-  const maquinas = ['maq01', 'maq02', 'maq03'];
+  const maquinas = ['MAQ01', 'MAQ02', 'MAQ03'];
   const countContainer = document.getElementById('ocorrenciasCount');
   countContainer.innerHTML = '';
 
@@ -175,7 +175,8 @@
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        const turnoCount = data.length;
+        const filteredData = data.filter(item => item.maquina === maquinaId);
+        const turnoCount = filteredData.length;
 
         const maquinaCard = document.createElement('div');
         maquinaCard.classList.add('card', 'mt-3');
@@ -199,6 +200,7 @@
       });
   });
 }
+
 
 
 
