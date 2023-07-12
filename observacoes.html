@@ -220,14 +220,16 @@
                             });
 
                             // Adiciona o evento de clique para mostrar os detalhes da ocorrência
-                            const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
-                            const detalhesButtons = observacoesTable.querySelectorAll('.detalhes-button');
+                            // Adiciona o evento de clique para mostrar os detalhes da ocorrência
+                                        const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
+                                        const detalhesButtons = observacoesTable.querySelectorAll('.detalhes-button');
 
-                            detalhesButtons.forEach(button => {
-                                button.addEventListener('click', function(event) {
-                                    const dataHora = this.getAttribute('data-hora');
-                                    const turno = this.parentNode.parentNode.querySelector('.turno-cell').textContent;
-                                    const obs = this.parentNode.parentNode.querySelector('.obs-cell').textContent;
+                                        detalhesButtons.forEach(button => {
+                                            button.addEventListener('click', function(event) {
+                                                const dataHora = this.getAttribute('data-hora');
+                                                const turno = this.parentNode.parentNode.querySelector('.turno-cell').textContent;
+                                                const obs = this.parentNode.parentNode.querySelector('.obs-cell').textContent;
+
 
                                     // Cria um elemento de sobreposição/modal para exibir os detalhes da ocorrência
                                     const overlay = document.createElement('div');
