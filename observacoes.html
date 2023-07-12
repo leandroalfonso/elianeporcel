@@ -190,21 +190,17 @@
                             // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
                             const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
                             const detalhesButtons = observacoesTable.getElementsByTagName('button');
+
                             Array.from(detalhesButtons).forEach(button => {
                                     button.addEventListener('click', function(event) {
                                         const dataHora = button.getAttribute('data-hora');
+                                        console.log("Botão clicado! dataHora:", dataHora); // Log adicional
                                         // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
                                         window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
-                                        console.log("Botão clicado!");
                                     });
                                 });
-                                                            Array.from(detalhesButtons).forEach(button => {
-                                button.addEventListener('click', function(event) {
-                                    const dataHora = button.getAttribute('data-hora');
-                                    // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
-                                    window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
-                                });
-                            });
+
+                               
                         })
                         .catch(error => {
                             console.error(error);
