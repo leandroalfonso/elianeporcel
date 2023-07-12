@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -45,15 +45,7 @@
             background-color: #138496;
             border-color: #138496;
         }
-
-        #chartContainer {
-            width: 100%;
-            height: 400px;
-        }
     </style>
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 </head>
 
 <body>
@@ -63,7 +55,6 @@
             <div class="form-group">
                 <label for="turnoInput">Turno:</label>
                 <select class="form-control" id="turnoInput" name="turno">
-                    <option value="">Todos</option>
                     <option value="TA">TA</option>
                     <option value="TB">TB</option>
                     <option value="TC">TC</option>
@@ -86,7 +77,8 @@
                 <textarea class="form-control" id="observacoesInput" name="observacoes" rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Salvar</button>
-            <button type="button" class="btn btn-attractive btn-block mt-3" onclick="openObservacoesPage()">Ver Observações</button>
+            <button type="button" class="btn btn-attractive btn-block mt-3" onclick="openObservacoesPage()">Ver
+                Observações</button>
         </form>
         <div class="container">
             <div class="card mt-4">
@@ -101,10 +93,17 @@
                             <option value="TC">TC</option>
                         </select>
                     </div>
-                    <div id="chartContainer"></div>
+                    <div id="ocorrenciasCount"></div>
                 </div>
             </div>
+
+
+
         </div>
+       
+
+
+
     </div>
 
     <!-- Bootstrap JS -->
@@ -142,6 +141,7 @@
                         alert("Dados salvos com sucesso!");
                         document.getElementById('maquinasForm').reset(); // Limpar os campos do formulário
                         window.location.href = "observacoes.html";
+
                     } else {
                         throw new Error("Erro ao salvar os dados.");
                     }
@@ -151,18 +151,19 @@
                 });
         });
 
+
         // Função para abrir a página de observações
         function openObservacoesPage() {
             window.location.href = "observacoes.html";
         }
 
         // Função para filtrar as ocorrências por turno
+
         function filterByTurno(turno) {
-            const maquinas = ['MAQ01', 'MAQ02', 'MAQ03'];
-            const countContainer = document.getElementById('chartContainer');
+            const maquinas = ['maq01', 'maq02', 'maq03'];
+            const countContainer = document.getElementById('ocorrenciasCount');
             countContainer.innerHTML = '';
 
-            const datasets = [];
 
             maquinas.forEach(maquinaId => {
                 fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
@@ -171,40 +172,31 @@
                         const filteredData = turno ? data.filter(item => item.turno === turno) : data;
                         const turnoCount = filteredData.length;
 
-                        datasets.push({
-                            label: `Máquina ${maquinaId.slice(3)}`,
-                            data: [turnoCount],
-                            backgroundColor: 'rgba(23, 162, 184, 0.5)',
-                            borderColor: 'rgba(23, 162, 184, 1)',
-                            borderWidth: 1
-                        });
+                        const maquinaCard = document.createElement('div');
+                        maquinaCard.classList.add('card', 'mt-3');
+                        const maquinaCardBody = document.createElement('div');
+                        maquinaCardBody.classList.add('card-body');
 
-                        if (datasets.length === maquinas.length) {
-                            const chartData = {
-                                labels: ['Ocorrências'],
-                                datasets: datasets
-                            };
+                        const maquinaTitle = document.createElement('h5');
+                        maquinaTitle.classList.add('card-title');
+                        maquinaTitle.textContent = `Máquina ${maquinaId.slice(3)}`;
+                        const maquinaCount = document.createElement('p');
+                        maquinaCount.classList.add('card-text');
+                        maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
 
-                            const chartOptions = {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            };
-
-                            const chart = new Chart(countContainer, {
-                                type: 'bar',
-                                data: chartData,
-                                options: chartOptions
-                            });
-                        }
+                        maquinaCardBody.appendChild(maquinaTitle);
+                        maquinaCardBody.appendChild(maquinaCount);
+                        maquinaCard.appendChild(maquinaCardBody);
+                        countContainer.appendChild(maquinaCard);
                     })
                     .catch(error => {
                         console.error(error);
                     });
             });
         }
+
+
+
     </script>
 </body>
 
