@@ -73,6 +73,7 @@
                                 <th>Data e Hora</th>
                                 <th>Turno</th>
                                 <th>Observações</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="maq01-observacoes"></tbody>
@@ -92,6 +93,7 @@
                                 <th>Data e Hora</th>
                                 <th>Turno</th>
                                 <th>Observações</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="maq02-observacoes"></tbody>
@@ -184,19 +186,17 @@
                             }
                         });
 
-                      
-                      // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
-                            const observacoesTable = document.getElementById(`maq${index + 1}-observacoes`);
-                            const detalhesButtons = observacoesTable.getElementsByClassName('detalhes-button');
+                        // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
+                        const observacoesTable = document.getElementById(`maq${index + 1}-observacoes`);
+                        const detalhesButtons = observacoesTable.getElementsByClassName('detalhes-button');
 
-                            Array.from(detalhesButtons).forEach(button => {
-                                button.addEventListener('click', function (event) {
-                                    const dataHora = button.getAttribute('data-hora');
-                                    // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
-                                    window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
-                                });
+                        Array.from(detalhesButtons).forEach(button => {
+                            button.addEventListener('click', function (event) {
+                                const dataHora = button.getAttribute('data-hora');
+                                // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
+                                window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
                             });
-
+                        });
                     })
                     .catch(error => {
                         console.error(error);
