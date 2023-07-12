@@ -182,6 +182,18 @@
                                 cutout: '80%'
                             }
                         });
+
+                        // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar na célula da tabela
+                        const observacoesTable = document.getElementById(`maq${index + 1}-observacoes`);
+                        observacoesTable.addEventListener('click', function (event) {
+                            const target = event.target;
+                            const row = target.closest('tr');
+                            const dataHoraCell = row.querySelector('td:first-child');
+                            const dataHora = dataHoraCell.textContent;
+
+                            // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
+                            window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
+                        });
                     })
                     .catch(error => {
                         console.error(error);
