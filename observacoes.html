@@ -48,6 +48,8 @@
     <div class="container">
         <h2 class="mt-3">Observações por Máquina</h2>
 
+        <div id="ocorrenciasCount"></div>
+
         <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="maq01-tab" data-bs-toggle="tab" data-bs-target="#maq01" type="button" role="tab" aria-controls="maq01" aria-selected="true">Máquina 01</button>
@@ -189,20 +191,16 @@
 
                             // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
                             const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
-                          // Alteração no seletor para obter os botões
-                                const detalhesButtons = observacoesTable.getElementsByClassName('detalhes-button');
+                            const detalhesButtons = observacoesTable.getElementsByClassName('detalhes-button');
 
-                                // Adição do evento de clique nos botões
-                                Array.from(detalhesButtons).forEach(button => {
-                                    button.addEventListener('click', function(event) {
-                                        const dataHora = button.getAttribute('data-hora');
-                                        console.log("Botão clicado! dataHora:", dataHora); // Log adicional
-                                        // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
-                                        window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
-                                    });
+                            Array.from(detalhesButtons).forEach(button => {
+                                button.addEventListener('click', function(event) {
+                                    const dataHora = button.getAttribute('data-hora');
+                                    console.log("Botão clicado! dataHora:", dataHora); // Log adicional
+                                    // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
+                                    window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
                                 });
-
-                               
+                            });
                         })
                         .catch(error => {
                             console.error(error);
