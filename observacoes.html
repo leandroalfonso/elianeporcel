@@ -183,16 +183,15 @@
                             }
                         });
 
-                        // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar na célula da tabela
+                        // Adiciona o redirecionamento para a página de detalhes da ocorrência ao clicar no botão
                         const observacoesTable = document.getElementById(`maq${index + 1}-observacoes`);
                         observacoesTable.addEventListener('click', function (event) {
                             const target = event.target;
-                            const row = target.closest('tr');
-                            const dataHoraCell = row.querySelector('td:first-child');
-                            const dataHora = dataHoraCell.textContent;
-
-                            // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
-                            window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
+                            if (target.tagName === 'BUTTON') {
+                                const dataHora = target.getAttribute('data-hora');
+                                // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
+                                window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
+                            }
                         });
                     })
                     .catch(error => {
@@ -213,6 +212,8 @@
                         const dataHoraCell = document.createElement('td');
                         const turnoCell = document.createElement('td');
                         const obsCell = document.createElement('td');
+                        const buttonCell = document.createElement('td');
+                        const detalhesButton = document.createElement('button');
 
                         // Formatar a data e hora para o formato brasileiro
                         const dataHora = new Date(item.dataHora).toLocaleString('pt-BR');
@@ -220,10 +221,16 @@
                         dataHoraCell.textContent = dataHora;
                         turnoCell.textContent = item.turno;
                         obsCell.textContent = item.obs;
+                        detalhesButton.textContent = 'Detalhes';
+                        detalhesButton.classList.add('btn', 'btn-primary');
+                        detalhesButton.setAttribute('data-hora', item.dataHora);
+
+                        buttonCell.appendChild(detalhesButton);
 
                         row.appendChild(dataHoraCell);
                         row.appendChild(turnoCell);
                         row.appendChild(obsCell);
+                        row.appendChild(buttonCell);
                         container.appendChild(row);
                     });
                 })
