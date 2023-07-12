@@ -222,7 +222,9 @@
                             // Adiciona o evento de clique para mostrar os detalhes da ocorrência
                             const observacoesTable = document.getElementById(`${maquinaId}-observacoes`);
                             const detalhesButtons = observacoesTable.querySelectorAll('.detalhes-button');
-
+detalhesButtons.addEventListener(()=>{
+    console.log('teste')
+})
                             detalhesButtons.forEach(button => {
                                 button.addEventListener('click', function(event) {
                                     const dataHora = this.getAttribute('data-hora');
