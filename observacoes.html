@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,6 +36,12 @@
         h2, h3 {
             color: #343a40;
         }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -57,6 +63,9 @@
         <div class="tab-content mt-4" id="myTabContent">
             <div class="tab-pane fade show active" id="maq01" role="tabpanel" aria-labelledby="maq01-tab">
                 <h3 class="mb-4">Máquina 01</h3>
+                <div class="chart-container">
+                    <canvas id="maq01-chart"></canvas>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -73,6 +82,9 @@
 
             <div class="tab-pane fade" id="maq02" role="tabpanel" aria-labelledby="maq02-tab">
                 <h3 class="mb-4">Máquina 02</h3>
+                <div class="chart-container">
+                    <canvas id="maq02-chart"></canvas>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -89,6 +101,9 @@
 
             <div class="tab-pane fade" id="maq03" role="tabpanel" aria-labelledby="maq03-tab">
                 <h3 class="mb-4">Máquina 03</h3>
+                <div class="chart-container">
+                    <canvas id="maq03-chart"></canvas>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -127,42 +142,74 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+
     <script>
         function filterByTurno(turno) {
-    const maquinas = ['maq01', 'maq02', 'maq03'];
-    const countContainer = document.getElementById('ocorrenciasCount');
-    countContainer.innerHTML = '';
-        
+            const maquinas = ['maq01', 'maq02', 'maq03'];
+            const countContainer = document.getElementById('ocorrenciasCount');
+            countContainer.innerHTML = '';
 
-    maquinas.forEach(maquinaId => {
-        fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
-            .then(response => response.json())
-            .then(data => {
-                const filteredData = turno ? data.filter(item => item.turno === turno) : data;
-                const turnoCount = filteredData.length;
+            maquinas.forEach((maquinaId, index) => {
+                fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const filteredData = turno ? data.filter(item => item.turno === turno) : data;
+                        const turnoCount = filteredData.length;
 
-                const maquinaCard = document.createElement('div');
-                maquinaCard.classList.add('card', 'mt-3');
-                const maquinaCardBody = document.createElement('div');
-                maquinaCardBody.classList.add('card-body');
+                        const maquinaCard = document.createElement('div');
+                        maquinaCard.classList.add('card', 'mt-3');
+                        const maquinaCardBody = document.createElement('div');
+                        maquinaCardBody.classList.add('card-body');
 
-                const maquinaTitle = document.createElement('h5');
-                maquinaTitle.classList.add('card-title');
-                maquinaTitle.textContent = `Máquina ${maquinaId.slice(3)}`;
-                const maquinaCount = document.createElement('p');
-                maquinaCount.classList.add('card-text');
-                maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
+                        const maquinaTitle = document.createElement('h5');
+                        maquinaTitle.classList.add('card-title');
+                        maquinaTitle.textContent = `Máquina ${index + 1}`;
+                        const maquinaCount = document.createElement('p');
+                        maquinaCount.classList.add('card-text');
+                        maquinaCount.textContent = `Quantidade de Ocorrências: ${turnoCount}`;
 
-                maquinaCardBody.appendChild(maquinaTitle);
-                maquinaCardBody.appendChild(maquinaCount);
-                maquinaCard.appendChild(maquinaCardBody);
-                countContainer.appendChild(maquinaCard);
-            })
-            .catch(error => {
-                console.error(error);
+                        maquinaCardBody.appendChild(maquinaTitle);
+                        maquinaCardBody.appendChild(maquinaCount);
+                        maquinaCard.appendChild(maquinaCardBody);
+                        countContainer.appendChild(maquinaCard);
+
+                        // Gráfico
+                        const chartContainer = document.getElementById(`maq${index + 1}-chart`);
+                        const chartLabels = ['Ocorrências', ''];
+                        const chartData = [turnoCount, 0];
+                        const chartColors = ['rgba(23, 162, 184, 0.5)', 'rgba(0, 0, 0, 0.2)'];
+
+                        const chart = new Chart(chartContainer, {
+                            type: 'doughnut',
+                            data: {
+                                labels: chartLabels,
+                                datasets: [
+                                    {
+                                        data: chartData,
+                                        backgroundColor: chartColors
+                                    }
+                                ]
+                            },
+                            options: {
+                                plugins: {
+                                    tooltip: {
+                                        enabled: false
+                                    },
+                                    legend: {
+                                        display: false
+                                    }
+                                },
+                                cutout: '80%'
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
             });
-    });
-}
+        }
 
         function fetchObservacoes(maquinaId, containerId) {
             fetch(`https://obs-eliane.vercel.app/maquinas/${maquinaId}`)
@@ -199,8 +246,6 @@
         fetchObservacoes('maq01', 'maq01-observacoes');
         fetchObservacoes('maq02', 'maq02-observacoes');
         fetchObservacoes('maq03', 'maq03-observacoes');
-
-      
     </script>
 </body>
 </html>
