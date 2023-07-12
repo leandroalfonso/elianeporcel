@@ -198,7 +198,8 @@
                                         const dataHora = button.getAttribute('data-hora');
                                         console.log("Botão clicado! dataHora:", dataHora); // Log adicional
                                         // Redireciona para a página de detalhes da ocorrência com o parâmetro do ID da ocorrência
-                                        window.location.href = `detalhes-ocorrencia.html?id=${dataHora}`;
+                                        window.location.href = `detalhes-ocorrencia.html?id=${encodeURIComponent(dataHora)}`;
+
                                     });
                                 });
 
