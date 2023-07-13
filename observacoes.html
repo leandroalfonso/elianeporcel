@@ -201,7 +201,7 @@
                             const turnoCell = document.createElement('td');
                             const obsCell = document.createElement('td');
                             const buttonCell = document.createElement('td');
-                           
+                            const detalhesButton = document.createElement('button');
 
                             // Formatar a data e hora para o formato brasileiro
                             const dataHora = new Date(item.dataHora).toLocaleString('pt-BR');
@@ -209,14 +209,15 @@
                             dataHoraCell.textContent = dataHora;
                             turnoCell.textContent = item.turno;
                             obsCell.textContent = item.obs;
-                           
+                            detalhesButton.textContent = 'Detalhes';
+                            detalhesButton.classList.add('btn', 'btn-primary', 'detalhes-button');
 
-                            buttonCell.appendChild(detalhesButton);
+                            
 
                             row.appendChild(dataHoraCell);
                             row.appendChild(turnoCell);
                             row.appendChild(obsCell);
-                           
+                            row.appendChild(buttonCell);
                             container.appendChild(row);
                         });
                     })
