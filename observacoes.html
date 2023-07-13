@@ -83,7 +83,9 @@
 
             <div class="tab-pane fade" id="maq02" role="tabpanel" aria-labelledby="maq02-tab">
                 <h3 class="mb-4">Máquina 02</h3>
-               
+                <div class="chart-container">
+                    <canvas id="maq02-chart"></canvas>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -212,7 +214,7 @@
                             detalhesButton.textContent = 'Detalhes';
                             detalhesButton.classList.add('btn', 'btn-primary', 'detalhes-button');
 
-                            
+                            buttonCell.appendChild(detalhesButton);
 
                             row.appendChild(dataHoraCell);
                             row.appendChild(turnoCell);
